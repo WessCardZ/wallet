@@ -57,21 +57,29 @@ export default function Wallet() {
             const dadosFirebase = await carregarWallet(dados.uid, mesSelecionado, anoSelecionado);
 
             if (dadosFirebase) {
-                setDados(prev => ({ ...prev, ...dadosFirebase }));
+                setDados(prev => ({
+                    ...prev,
+                    ...dadosFirebase,
+                    tipo: dadosFirebase.tipo || prev.tipo,
+                    salarioMensal: dadosFirebase.salarioMensal ?? prev.salarioMensal,
+                }));
             } else {
                 setDados(prev => ({
                     ...prev,
-                    tipo: "pj",
                     gastos: [],
                     extras: [],
                     bancos: [],
+                    diasRemovidos: [],
+                    ...(prev.tipo === "pj"
+                        ? { tipo: "pj" }
+                        : { tipo: "clt", salarioMensal: prev.salarioMensal }),
                 }));
             }
-
         };
 
         carregar();
     }, [dados.uid, mesSelecionado, anoSelecionado]);
+
 
     const calcularDiasTrabalhados = useCallback(() => {
         if (dados.tipo !== "pj") return 30;
@@ -310,7 +318,7 @@ export default function Wallet() {
                                     onChange={(e) =>
                                         setDados({
                                             ...dados,
-                                            valorHora: parseFloat(e.target.value) || 0,
+                                            valorHora: parseFloat(e.target.value),
                                         })
                                     }
                                 />
@@ -322,7 +330,7 @@ export default function Wallet() {
                                     onChange={(e) =>
                                         setDados({
                                             ...dados,
-                                            horasDia: parseFloat(e.target.value) || 0,
+                                            horasDia: parseFloat(e.target.value),
                                         })
                                     }
                                 />
@@ -334,7 +342,7 @@ export default function Wallet() {
                                     onChange={(e) =>
                                         setDados({
                                             ...dados,
-                                            minutosDia: parseFloat(e.target.value) || 0,
+                                            minutosDia: parseFloat(e.target.value),
                                         })
                                     }
                                 />
@@ -386,17 +394,7 @@ export default function Wallet() {
                                     onClick={async () => {
                                         if (!dados.uid) return alert("Usuário não identificado!");
 
-                                        const novosTurnos = {
-                                            ...(dados.turnos || {}),
-                                            [dados.turno]: {
-                                                valorHora: dados.valorHora,
-                                                horasDia: dados.horasDia,
-                                                minutosDia: dados.minutosDia,
-                                                diasTrabalhados: dados.diasTrabalhados,
-                                            },
-                                        };
-
-                                        const dadosAtualizados = { ...dados, turnos: novosTurnos };
+                                        const dadosAtualizados = { ...dados };
 
                                         await salvarWallet(
                                             dados.uid,
@@ -419,11 +417,11 @@ export default function Wallet() {
                                     onChange={(e) =>
                                         setDados({
                                             ...dados,
-                                            salarioMensal: parseFloat(e.target.value) || 0,
+                                            salarioMensal: parseFloat(e.target.value),
                                         })
                                     }
                                 />
-                                <label>Valor hora extra (R$):</label>
+                                {/* <label>Valor hora extra (R$):</label>
                                 <input
                                     type="number"
                                     value={dados.valorHoraClt}
@@ -433,7 +431,23 @@ export default function Wallet() {
                                             valorHoraClt: parseFloat(e.target.value) || 0,
                                         })
                                     }
-                                />
+                                /> */}
+                                <button
+                                    onClick={async () => {
+                                        if (!dados.uid) return alert("Usuário não identificado!");
+                                        const novosDados = { ...dados };
+                                        await salvarWallet(
+                                            dados.uid,
+                                            novosDados,
+                                            mesSelecionado,
+                                            anoSelecionado
+                                        );
+                                        alert("💾 Configurações CLT salvas com sucesso!");
+                                    }}
+                                >
+                                    Salvar
+                                </button>
+
                             </>
                         )}
                     </section>
