@@ -37,7 +37,6 @@ export {
     db
 };
 
-// ✅ Helpers para Wallet
 const getMesAtualId = (mesIndex = new Date().getMonth(), ano = new Date().getFullYear()) => {
     const mes = String(mesIndex + 1).padStart(2, "0");
     return `${ano}-${mes}`;

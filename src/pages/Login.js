@@ -20,15 +20,20 @@ export default function Login() {
     const [loadingButton, setLoadingButton] = useState(null);
     const [mostrarSenha, setMostrarSenha] = useState(false);
     const [modoCriarConta, setModoCriarConta] = useState(false);
+    const [verificandoLogin, setVerificandoLogin] = useState(true);
+
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) navigate("/wallet");
+            if (user) {
+                navigate("/wallet");
+            } else {
+                setVerificandoLogin(false);
+            }
         });
         return unsubscribe;
     }, [navigate]);
 
-    // Função para validar email
     const validarEmail = (email) => {
         const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
@@ -79,10 +84,21 @@ export default function Login() {
         }
     };
 
+    if (verificandoLogin) {
+        return (
+            <div className="login-page">
+                <div className="login-container" style={{ textAlign: "center" }}>
+                    <div className="loader"></div>
+                    <p style={{ color: "#ccc", marginTop: "10px" }}>Verificando login...</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="login-page">
             <div className="login-container">
-                <h1>💰 Wallet</h1>
+                <h1>Sobrinha</h1>
 
                 {!modoCriarConta ? (
                     <>

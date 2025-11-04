@@ -59,20 +59,12 @@ export default function Wallet() {
             if (dadosFirebase) {
                 setDados(prev => ({ ...prev, ...dadosFirebase }));
             } else {
-                // Novo mês sem dados -> zera os campos
                 setDados(prev => ({
                     ...prev,
                     tipo: "pj",
-                    // valorHora: 0,
-                    // horasDia: 0,
-                    // minutosDia: 0,
-                    // diasTrabalhados: [],
-                    // salarioMensal: 0,
-                    // valorHoraClt: 0,
                     gastos: [],
                     extras: [],
                     bancos: [],
-                    // diasRemovidos: [],
                 }));
             }
 
@@ -80,14 +72,6 @@ export default function Wallet() {
 
         carregar();
     }, [dados.uid, mesSelecionado, anoSelecionado]);
-
-
-    // useEffect(() => {
-    //     if (!carregado || !dados.uid) return;
-
-    //     salvarWallet(dados.uid, dados, mesSelecionado, anoSelecionado);
-    // }, [dados, carregado, mesSelecionado, anoSelecionado]);
-
 
     const calcularDiasTrabalhados = useCallback(() => {
         if (dados.tipo !== "pj") return 30;
@@ -136,12 +120,6 @@ export default function Wallet() {
     useEffect(() => {
         calcularResumo();
     }, [dados, calcularResumo]);
-
-    // async function salvarManual() {
-    //     if (!dados.uid) return alert("Usuário não identificado!");
-    //     await salvarWallet(dados.uid, dados, mesSelecionado, anoSelecionado);
-    //     alert("💾 Dados salvos com sucesso!");
-    // }
 
     async function adicionarItem(tipo, item) {
         setDados((prev) => {
@@ -199,8 +177,7 @@ export default function Wallet() {
             <aside className="sidebar">
                 <div className="headerContainer">
                     <div>
-
-                        <h1>Wallet</h1>
+                        <h1>Sobrinha</h1>
                     </div>
 
                     <button
@@ -245,12 +222,6 @@ export default function Wallet() {
                 </select>
 
                 <div className="saldo">
-                    {/* <p><strong>📆 {[
-                        "Janeiro", "Fevereiro", "Março", "Abril",
-                        "Maio", "Junho", "Julho", "Agosto",
-                        "Setembro", "Outubro", "Novembro", "Dezembro"
-                    ][mesSelecionado]} (mês atual)</strong></p> */}
-
                     <p><strong>📊 Resumo do Mês</strong></p>
 
                     <p><strong>Dias trabalhados:</strong></p>
@@ -281,14 +252,6 @@ export default function Wallet() {
                     <button onClick={() => setSecaoAtiva("gasto")}>➕ Adicionar Gasto</button>
                     <button onClick={() => setSecaoAtiva("extra")}>⏱️ Horas Extras</button>
                     <button onClick={() => setSecaoAtiva("banco")}>🏦 Bancos / Cartões</button>
-
-                    {/* 🔹 Novo botão de salvar manual */}
-                    {/* <button
-                        style={{ backgroundColor: "#27ae60", color: "#fff", marginTop: "10px", height: "40px" }}
-                        onClick={salvarManual}
-                    >
-                        💾 Salvar Wallet
-                    </button> */}
                 </div>
             </aside>
 
@@ -344,70 +307,107 @@ export default function Wallet() {
                                 <input
                                     type="number"
                                     value={dados.valorHora}
-                                    onFocus={(e) => {
-                                        if (e.target.value === "0") setDados({ ...dados, valorHora: "" });
-                                    }}
-                                    onBlur={(e) => {
-                                        if (e.target.value === "") setDados({ ...dados, valorHora: 0 });
-                                    }}
-                                    onChange={(e) => setDados({ ...dados, valorHora: parseValor(e.target.value) })}
+                                    onChange={(e) =>
+                                        setDados({
+                                            ...dados,
+                                            valorHora: parseFloat(e.target.value) || 0,
+                                        })
+                                    }
                                 />
+
                                 <label>Horas por dia:</label>
                                 <input
                                     type="number"
                                     value={dados.horasDia}
-                                    onFocus={(e) => {
-                                        if (e.target.value === "0") setDados({ ...dados, horasDia: "" });
-                                    }}
-                                    onBlur={(e) => {
-                                        if (e.target.value === "") setDados({ ...dados, horasDia: 0 });
-                                    }}
-                                    onChange={(e) => setDados({ ...dados, horasDia: parseValor(e.target.value) })}
+                                    onChange={(e) =>
+                                        setDados({
+                                            ...dados,
+                                            horasDia: parseFloat(e.target.value) || 0,
+                                        })
+                                    }
                                 />
+
                                 <label>Minutos por dia:</label>
                                 <input
                                     type="number"
                                     value={dados.minutosDia}
-                                    onFocus={(e) => {
-                                        if (e.target.value === "0") setDados({ ...dados, minutosDia: "" });
-                                    }}
-                                    onBlur={(e) => {
-                                        if (e.target.value === "") setDados({ ...dados, minutosDia: 0 });
-                                    }}
-                                    onChange={(e) => setDados({ ...dados, minutosDia: parseValor(e.target.value) })}
+                                    onChange={(e) =>
+                                        setDados({
+                                            ...dados,
+                                            minutosDia: parseFloat(e.target.value) || 0,
+                                        })
+                                    }
                                 />
+
                                 <label>Dias trabalhados na semana:</label>
                                 <div className="dias-semana">
-                                    {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map((d, i) => (
-                                        <label key={i}>
-                                            <input
-                                                type="checkbox"
-                                                value={i}
-                                                checked={dados.diasTrabalhados.includes(i)}
-                                                onChange={(e) => {
-                                                    const dia = parseInt(e.target.value);
-                                                    const dias = [...dados.diasTrabalhados];
-                                                    if (e.target.checked) {
-                                                        if (!dias.includes(dia)) dias.push(dia);
-                                                    } else {
-                                                        const idx = dias.indexOf(dia);
-                                                        if (idx > -1) dias.splice(idx, 1);
-                                                    }
-                                                    setDados({ ...dados, diasTrabalhados: dias });
-                                                }}
-                                            />
-                                            {d}
-                                        </label>
-                                    ))}
+                                    {["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"].map(
+                                        (d, i) => (
+                                            <label key={i}>
+                                                <input
+                                                    type="checkbox"
+                                                    value={i}
+                                                    checked={dados.diasTrabalhados.includes(i)}
+                                                    onChange={(e) => {
+                                                        const dia = parseInt(e.target.value);
+                                                        const dias = [...dados.diasTrabalhados];
+                                                        if (e.target.checked) {
+                                                            if (!dias.includes(dia)) dias.push(dia);
+                                                        } else {
+                                                            const idx = dias.indexOf(dia);
+                                                            if (idx > -1) dias.splice(idx, 1);
+                                                        }
+                                                        setDados({
+                                                            ...dados,
+                                                            diasTrabalhados: dias,
+                                                        });
+                                                    }}
+                                                />
+                                                {d}
+                                            </label>
+                                        )
+                                    )}
                                 </div>
 
                                 <button
-                                    style={{ marginBottom: '8px' }}
+                                    style={{ marginBottom: "8px" }}
                                     onClick={() =>
-                                        setSecaoAtiva(secaoAtiva === "diasRemovidos" ? "config" : "diasRemovidos")
+                                        setSecaoAtiva(
+                                            secaoAtiva === "diasRemovidos"
+                                                ? "config"
+                                                : "diasRemovidos"
+                                        )
                                     }
                                 >
                                     🗓️ Gerenciar dias não trabalhados
+                                </button>
+
+                                <button
+                                    onClick={async () => {
+                                        if (!dados.uid) return alert("Usuário não identificado!");
+
+                                        const novosTurnos = {
+                                            ...(dados.turnos || {}),
+                                            [dados.turno]: {
+                                                valorHora: dados.valorHora,
+                                                horasDia: dados.horasDia,
+                                                minutosDia: dados.minutosDia,
+                                                diasTrabalhados: dados.diasTrabalhados,
+                                            },
+                                        };
+
+                                        const dadosAtualizados = { ...dados, turnos: novosTurnos };
+
+                                        await salvarWallet(
+                                            dados.uid,
+                                            dadosAtualizados,
+                                            mesSelecionado,
+                                            anoSelecionado
+                                        );
+                                        alert("💾 Configurações salvas com sucesso!");
+                                    }}
+                                >
+                                    Salvar
                                 </button>
                             </>
                         ) : (
@@ -416,40 +416,43 @@ export default function Wallet() {
                                 <input
                                     type="number"
                                     value={dados.salarioMensal}
-                                    onFocus={(e) => {
-                                        if (e.target.value === "0") setDados({ ...dados, salarioMensal: "" });
-                                    }}
-                                    onBlur={(e) => {
-                                        if (e.target.value === "") setDados({ ...dados, salarioMensal: 0 });
-                                    }}
-                                    onChange={(e) => setDados({ ...dados, salarioMensal: parseValor(e.target.value) })}
+                                    onChange={(e) =>
+                                        setDados({
+                                            ...dados,
+                                            salarioMensal: parseFloat(e.target.value) || 0,
+                                        })
+                                    }
                                 />
                                 <label>Valor hora extra (R$):</label>
                                 <input
                                     type="number"
                                     value={dados.valorHoraClt}
-                                    onFocus={(e) => {
-                                        if (e.target.value === "0") setDados({ ...dados, valorHoraClt: "" });
-                                    }}
-                                    onBlur={(e) => {
-                                        if (e.target.value === "") setDados({ ...dados, valorHoraClt: 0 });
-                                    }}
-                                    onChange={(e) => setDados({ ...dados, valorHoraClt: parseValor(e.target.value) })}
+                                    onChange={(e) =>
+                                        setDados({
+                                            ...dados,
+                                            valorHoraClt: parseFloat(e.target.value) || 0,
+                                        })
+                                    }
                                 />
                             </>
                         )}
-                        <button onClick={() => alert("Configurações salvas!")}>Salvar</button>
                     </section>
                 )}
 
+
+
                 {secaoAtiva === "diasRemovidos" && (
                     <section className="card">
-                        <h2>Dias Não Trabalhados</h2>
+                        <h2>Dias Não Trabalhados - {[
+                            "Janeiro", "Fevereiro", "Março", "Abril",
+                            "Maio", "Junho", "Julho", "Agosto",
+                            "Setembro", "Outubro", "Novembro", "Dezembro"
+                        ][mesSelecionado]} {anoSelecionado}</h2>
+
                         <div className="dias-mes">
                             {(() => {
-                                const hoje = new Date();
-                                const ano = hoje.getFullYear();
-                                const mes = hoje.getMonth();
+                                const ano = anoSelecionado;
+                                const mes = mesSelecionado;
                                 const diasMes = new Date(ano, mes + 1, 0).getDate();
                                 const diasTrabalhadosSemana = dados.diasTrabalhados.map(Number);
 
@@ -484,17 +487,27 @@ export default function Wallet() {
                                 return diasRender;
                             })()}
                         </div>
+
                         <button
                             style={{ marginTop: "10px" }}
-                            onClick={() => {
-                                alert("✅ Dias não trabalhados atualizados!");
-                                setSecaoAtiva("config");
+                            onClick={async () => {
+                                if (!dados.uid) return alert("Usuário não identificado!");
+                                try {
+                                    const novosDados = { ...dados };
+                                    await salvarWallet(dados.uid, novosDados, mesSelecionado, anoSelecionado);
+                                    alert("✅ Dias não trabalhados salvos com sucesso!");
+                                    setSecaoAtiva("config");
+                                } catch (err) {
+                                    console.error("❌ Erro ao salvar dias removidos:", err);
+                                    alert("Erro ao salvar dias não trabalhados!");
+                                }
                             }}
                         >
                             Salvar
                         </button>
                     </section>
                 )}
+
 
                 {secaoAtiva === "gasto" && (
                     <section className="card" id="gastosList">
