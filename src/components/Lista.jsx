@@ -134,7 +134,9 @@ export default function Lista({ itens, tipo, onRemover, onEditar, onAddValor }) 
                                         onClick={() => togglePago(i)}
                                         title={item.pago ? "Marcar como não pago" : "Marcar como pago"}
                                     >
-                                        {item.pago ? "💸" : "⬜"}
+                                        <span className="iconPay">
+                                            {item.pago ? "💸" : "⬜"}
+                                        </span>
                                     </button>
                                 )}
 

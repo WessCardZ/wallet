@@ -748,6 +748,37 @@ button:disabled {
         flex-direction: column;
         align-items: stretch;
     }
+
+    .acoes-item {
+        gap: 4px;
+    }
+
+    .btn-acao {
+        padding: 4px;
+        border-radius: 6px;
+    }
+
+    .btn-acao svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .iconPay {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 14px;
+        height: 14px;
+    }
+
+    .editar,
+    .remover,
+    .adicionar,
+    .pago {
+        box-sizing: border-box;
+        margin-left: 4px;
+        font-size: 16px;
+    }
 }
 
 
