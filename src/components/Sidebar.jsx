@@ -1,7 +1,7 @@
 import React from "react";
 import { signOut } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import "../pages/style.css"; // se o CSS do sidebar está no style.css
+import "../pages/style.css";
 
 export default function Sidebar({
     mesSelecionado,

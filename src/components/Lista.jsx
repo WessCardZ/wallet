@@ -1,4 +1,3 @@
-// src/components/Lista.jsx
 import { useState } from "react";
 import { parseValor } from "./utils";
 
@@ -8,10 +7,26 @@ export default function Lista({ itens, tipo, onRemover, onEditar, onAddValor }) 
     const [addValueIndex, setAddValueIndex] = useState(null);
     const [addValue, setAddValue] = useState("");
 
+    const togglePago = (i) => {
+        const item = itens[i];
+        const atualizado = { ...item, pago: !item.pago };
+        onEditar(i, atualizado);
+    };
+
     return (
         <ul>
             {itens.map((item, i) => (
-                <li key={i}>
+                <li
+                    key={i}
+                    className={item.pago ? "item-pago" : ""}
+                    style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        opacity: item.pago ? 0.6 : 1,
+                        textDecoration: item.pago ? "line-through" : "none",
+                    }}
+                >
                     {editIndex === i ? (
                         <>
                             <input
@@ -96,11 +111,33 @@ export default function Lista({ itens, tipo, onRemover, onEditar, onAddValor }) 
                         </>
                     ) : (
                         <>
-                            {tipo === "gasto" && `${item.nome} - R$ ${item.valor.toFixed(2)}`}
-                            {tipo === "extra" && `${item.horas}h ${item.minutos}m - R$ ${item.valorHora.toFixed(2)}/h`}
-                            {tipo === "banco" && `${item.nome} - R$ ${item.valor.toFixed(2)}`}
+                            <span>
+                                {tipo === "gasto" && `${item.nome} - R$ ${item.valor.toFixed(2)}`}
+                                {tipo === "extra" && `${item.horas}h ${item.minutos}m - R$ ${item.valorHora.toFixed(2)}/h`}
+                                {tipo === "banco" && (
+                                    <>
+                                        {item.ehMeu === false
+                                            ? `${item.nome} - de ${item.dono} - R$ ${item.valor.toFixed(2)}`
+                                            : `${item.nome} - R$ ${item.valor.toFixed(2)}`}
+                                    </>
+                                )}
+                                {" "}
+                                <strong style={{ color: item.pago ? "green" : "red" }}>
+                                    ({item.pago ? "Pago" : "Pendente"})
+                                </strong>
+                            </span>
 
                             <div className="acoes-item">
+                                {tipo !== "extra" && (
+                                    <button
+                                        className="btn-acao pago"
+                                        onClick={() => togglePago(i)}
+                                        title={item.pago ? "Marcar como não pago" : "Marcar como pago"}
+                                    >
+                                        {item.pago ? "💸" : "⬜"}
+                                    </button>
+                                )}
+
                                 {tipo !== "extra" && (
                                     <button
                                         className="btn-acao adicionar"
@@ -140,7 +177,6 @@ export default function Lista({ itens, tipo, onRemover, onEditar, onAddValor }) 
                                 </button>
                             </div>
                         </>
-
                     )}
                 </li>
             ))}

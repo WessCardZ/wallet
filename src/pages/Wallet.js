@@ -10,7 +10,6 @@ import GastoForm from "../components/GastoForm";
 import Config from "../components/Config";
 import DiasRemovidos from "../components/DiasRemovidos";
 
-
 export default function Wallet() {
     const navigate = useNavigate();
     const [mesSelecionado, setMesSelecionado] = useState(new Date().getMonth());
@@ -114,7 +113,10 @@ export default function Wallet() {
         totalReceita += totalExtras;
 
         const totalGastos = dados.gastos.reduce((acc, g) => acc + g.valor, 0);
-        const totalBancos = dados.bancos.reduce((acc, b) => acc + b.valor, 0);
+        const totalBancos = dados.bancos
+            .filter((b) => b.ehMeu === undefined || b.ehMeu === true)
+            .reduce((acc, b) => acc + b.valor, 0);
+
         const sobra = totalReceita - (totalGastos + totalBancos);
 
         setResumo({
@@ -249,12 +251,17 @@ export default function Wallet() {
                     />
                 )}
 
-
                 {secaoAtiva === "gasto" && (
                     <section className="card" id="gastosList">
                         <h2>Adicionar Gasto</h2>
                         <GastoForm onAdd={(g) => adicionarItem("gastos", g)} />
-                        <Lista itens={dados.gastos} tipo="gasto" onRemover={(i) => removerItem("gastos", i)} />
+                        <Lista
+                            itens={dados.gastos}
+                            tipo="gasto"
+                            onRemover={(i) => removerItem("gastos", i)}
+                            onEditar={(i, novoItem) => editarItem("gastos", i, novoItem)}
+                            onAddValor={(i, valor) => addValor("gastos", i, valor)}
+                        />
                     </section>
                 )}
 
@@ -262,18 +269,32 @@ export default function Wallet() {
                     <section className="card">
                         <h2>Adicionar Horas Extras</h2>
                         <ExtraForm onAdd={(e) => adicionarItem("extras", e)} />
-                        <Lista itens={dados.extras} tipo="extra" onRemover={(i) => removerItem("extras", i)} />
+                        <hr />
+                        <Lista
+                            itens={dados.extras}
+                            tipo="extra"
+                            onRemover={(i) => removerItem("extras", i)}
+                            onEditar={(i, novoItem) => editarItem("extras", i, novoItem)}
+                            onAddValor={(i, valor) => addValor("extras", i, valor)}
+                        />
                     </section>
                 )}
 
                 {secaoAtiva === "banco" && (
                     <section className="card" id="bancosList">
-                        <h2>Adicionar Banco / Cartão</h2>
+                        <h2>Bancos / Cartões</h2>
                         <BancoForm onAdd={(b) => adicionarItem("bancos", b)} />
-                        <Lista itens={dados.bancos} tipo="banco" onRemover={(i) => removerItem("bancos", i)} />
+                        <hr />
+                        <Lista
+                            itens={dados.bancos}
+                            tipo="banco"
+                            onRemover={(i) => removerItem("bancos", i)}
+                            onEditar={(i, novoItem) => editarItem("bancos", i, novoItem)}
+                            onAddValor={(i, valor) => addValor("bancos", i, valor)}
+                        />
                     </section>
                 )}
             </main>
-        </div>
+        </div >
     );
 }

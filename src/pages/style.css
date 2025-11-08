@@ -184,6 +184,14 @@ ul li {
 }
 
 /* cores específicas para btn-acao */
+.btn-acao.pago {
+    background-color: #3498db;
+}
+
+.btn-acao.pago:hover {
+    background-color: #5dade2;
+}
+
 .btn-acao.salvar {
     background-color: #3498db;
 }
@@ -259,7 +267,9 @@ ul li {
 
 /* ==================== Editar / Remover (botões simples) ==================== */
 .editar,
-.remover {
+.remover,
+.adicionar,
+.pago {
     background: transparent;
     border: none;
     color: #fff;
@@ -425,7 +435,7 @@ button:disabled {
 /* ==================== Limita a altura das listas e adiciona scroll vertical ==================== */
 #gastosList ul,
 #bancosList ul {
-    max-height: 210px;
+    max-height: 300px;
     overflow-y: auto;
     overflow-x: hidden;
     padding-right: 6px;
