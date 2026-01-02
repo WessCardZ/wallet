@@ -432,6 +432,36 @@ button:disabled {
     font-size: 13px;
 }
 
+
+
+/* ---------------------- NOVO ---------------------- */
+
+.containerConfig {
+    background: #1a2338;
+    padding: 40px;
+    border-radius: 14px;
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+}
+
+.containerConfig>div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border: solid 1px red;
+    width: 100%;
+}
+
+.containerConfig input {
+    width: 80%;
+}
+
+/* -------------------------------------------------- */
+
 /* ==================== Limita a altura das listas e adiciona scroll vertical ==================== */
 #gastosList ul,
 #bancosList ul {
