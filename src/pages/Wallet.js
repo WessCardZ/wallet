@@ -149,9 +149,10 @@ export default function Wallet() {
         );
 
         const gastosBancos = wallet.bancos.reduce(
-            (a, b) => a + (b.valor ?? 0),
+            (a, b) => b.ehMeu ? a + (b.valor ?? 0) : a,
             0
         );
+
 
         const gastos = gastosFixos + gastosBancos;
 
