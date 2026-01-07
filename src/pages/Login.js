@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
     auth,
     provider,
@@ -9,6 +9,8 @@ import {
 } from "../firebase";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
+import { carregarConfig } from "../firebase";
+
 
 export default function Login() {
     const navigate = useNavigate();
@@ -22,30 +24,52 @@ export default function Login() {
     const [modoCriarConta, setModoCriarConta] = useState(false);
     const [verificandoLogin, setVerificandoLogin] = useState(true);
 
+    /* =========================
+       VERIFICAR CONFIG
+    ========================= */
+    const verificarConfigEIr = useCallback(
+        async (user) => {
+            if (!user) return;
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, (user) => {
-            if (user) {
+            const config = await carregarConfig(user.uid);
+
+            if (config) {
                 navigate("/wallet");
+            } else {
+                navigate("/config");
+            }
+        },
+        [navigate]
+    );
+
+    /* =========================
+       AUTH STATE
+    ========================= */
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                await verificarConfigEIr(user);
             } else {
                 setVerificandoLogin(false);
             }
         });
-        return unsubscribe;
-    }, [navigate]);
 
-    const validarEmail = (email) => {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return regex.test(email);
-    };
+        return unsubscribe;
+    }, [verificarConfigEIr]);
+
+    const validarEmail = (email) =>
+        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
     const login = async () => {
-        if (!email || !senha) return setMensagem("⚠️ Preencha todos os campos!");
+        if (!email || !senha) {
+            setMensagem("⚠️ Preencha todos os campos!");
+            return;
+        }
+
         setLoadingButton("entrar");
         try {
-            await signInWithEmailAndPassword(auth, email, senha);
-            setMensagem("✅ Login realizado com sucesso!");
-            navigate("/wallet");
+            const cred = await signInWithEmailAndPassword(auth, email, senha);
+            await verificarConfigEIr(cred.user);
         } catch {
             setMensagem("❌ Usuário não encontrado ou senha incorreta!");
         } finally {
@@ -54,16 +78,30 @@ export default function Login() {
     };
 
     const criarConta = async () => {
-        if (!email || !senha || !confirmarSenha) return setMensagem("⚠️ Preencha todos os campos!");
-        if (!validarEmail(email)) return setMensagem("❌ Digite um e-mail válido!");
-        if (senha !== confirmarSenha) return setMensagem("❌ As senhas não coincidem!");
-        if (senha.length < 6) return setMensagem("❌ A senha precisa ter pelo menos 6 caracteres!");
+        if (!email || !senha || !confirmarSenha) {
+            setMensagem("⚠️ Preencha todos os campos!");
+            return;
+        }
+
+        if (!validarEmail(email)) {
+            setMensagem("❌ Digite um e-mail válido!");
+            return;
+        }
+
+        if (senha !== confirmarSenha) {
+            setMensagem("❌ As senhas não coincidem!");
+            return;
+        }
+
+        if (senha.length < 6) {
+            setMensagem("❌ A senha precisa ter pelo menos 6 caracteres!");
+            return;
+        }
 
         setLoadingButton("criar");
         try {
             await createUserWithEmailAndPassword(auth, email, senha);
-            setMensagem("🎉 Conta criada com sucesso!");
-            navigate("/wallet");
+            navigate("/config");
         } catch (e) {
             setMensagem(`❌ Erro: ${e.message}`);
         } finally {
@@ -74,9 +112,8 @@ export default function Login() {
     const loginGoogle = async () => {
         setLoadingButton("google");
         try {
-            await signInWithPopup(auth, provider);
-            setMensagem("✅ Login com Google realizado!");
-            navigate("/wallet");
+            const result = await signInWithPopup(auth, provider);
+            await verificarConfigEIr(result.user);
         } catch {
             setMensagem("❌ Erro ao entrar com Google!");
         } finally {
@@ -89,7 +126,9 @@ export default function Login() {
             <div className="login-page">
                 <div className="login-container" style={{ textAlign: "center" }}>
                     <div className="loader"></div>
-                    <p style={{ color: "#ccc", marginTop: "10px" }}>Verificando login...</p>
+                    <p style={{ color: "#ccc", marginTop: "10px" }}>
+                        Verificando login...
+                    </p>
                 </div>
             </div>
         );

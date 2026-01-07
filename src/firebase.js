@@ -8,7 +8,16 @@ import {
     onAuthStateChanged,
     signOut as firebaseSignOut
 } from "firebase/auth";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import {
+    doc,
+    getDoc,
+    getFirestore,
+    setDoc
+} from "firebase/firestore";
+
+/* =========================
+   CONFIG INICIAL
+========================= */
 
 const firebaseConfig = {
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -21,42 +30,92 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-const db = getFirestore(app);
+export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider();
+export const db = getFirestore(app);
 
 export const signOut = () => firebaseSignOut(auth);
 
 export {
-    auth,
-    provider,
     signInWithPopup,
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
-    onAuthStateChanged,
-    db
+    onAuthStateChanged
 };
 
-const getMesAtualId = (mesIndex = new Date().getMonth(), ano = new Date().getFullYear()) => {
+/* =========================
+   HELPERS
+========================= */
+
+const getMesAtualId = (
+    mesIndex = new Date().getMonth(),
+    ano = new Date().getFullYear()
+) => {
     const mes = String(mesIndex + 1).padStart(2, "0");
     return `${ano}-${mes}`;
 };
 
-export const salvarWallet = async (uid, dados, mesSelecionado = new Date().getMonth(), anoSelecionado = new Date().getFullYear()) => {
+/* =========================
+   CONFIGURAÇÃO DO USUÁRIO
+========================= */
+
+export const salvarConfig = async (uid, config) => {
+    try {
+        await setDoc(
+            doc(db, "users", uid, "config", "data"),
+            config
+        );
+        console.log("✅ Configuração salva");
+    } catch (err) {
+        console.error("❌ Erro ao salvar config:", err);
+    }
+};
+
+export const carregarConfig = async (uid) => {
+    try {
+        const snap = await getDoc(
+            doc(db, "users", uid, "config", "data")
+        );
+        return snap.exists() ? snap.data() : null;
+    } catch (err) {
+        console.error("❌ Erro ao carregar config:", err);
+        return null;
+    }
+};
+
+/* =========================
+   WALLET (MENSAL)
+========================= */
+
+export const salvarWallet = async (
+    uid,
+    wallet,
+    mesSelecionado = new Date().getMonth(),
+    anoSelecionado = new Date().getFullYear()
+) => {
     try {
         const mesId = getMesAtualId(mesSelecionado, anoSelecionado);
-        await setDoc(doc(db, "wallets", uid, "meses", mesId), dados);
-        console.log(`✅ Wallet salva para o mês ${mesId}`);
+        await setDoc(
+            doc(db, "wallets", uid, "meses", mesId),
+            wallet
+        );
+        console.log(`✅ Wallet salva (${mesId})`);
     } catch (err) {
         console.error("❌ Erro ao salvar Wallet:", err);
     }
 };
 
-export const carregarWallet = async (uid, mesSelecionado = new Date().getMonth(), anoSelecionado = new Date().getFullYear()) => {
+export const carregarWallet = async (
+    uid,
+    mesSelecionado = new Date().getMonth(),
+    anoSelecionado = new Date().getFullYear()
+) => {
     try {
         const mesId = getMesAtualId(mesSelecionado, anoSelecionado);
-        const docSnap = await getDoc(doc(db, "wallets", uid, "meses", mesId));
-        return docSnap.exists() ? docSnap.data() : null;
+        const snap = await getDoc(
+            doc(db, "wallets", uid, "meses", mesId)
+        );
+        return snap.exists() ? snap.data() : null;
     } catch (err) {
         console.error("❌ Erro ao carregar Wallet:", err);
         return null;
