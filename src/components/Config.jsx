@@ -1,27 +1,27 @@
-import { salvarWallet } from "../firebase";
+import { salvarConfig } from "../firebase";
 import "../pages/style.css";
 
-export default function Config({ dados, setDados, secaoAtiva, setSecaoAtiva, mesSelecionado, anoSelecionado }) {
+export default function Config({ config, setConfig, secaoAtiva, setSecaoAtiva, mesSelecionado, anoSelecionado }) {
     return (
         <section className="card">
             <h2>Configuração de Rendimento</h2>
             <select
-                value={dados.tipo}
-                onChange={(e) => setDados({ ...dados, tipo: e.target.value })}
+                value={config.tipo}
+                onChange={(e) => setConfig({ ...config, tipo: e.target.value })}
             >
                 <option value="pj">PJ (por hora)</option>
                 <option value="clt">CLT (salário fixo)</option>
             </select>
 
-            {dados.tipo === "pj" ? (
+            {config.tipo === "pj" ? (
                 <>
                     <label>Valor por hora (R$):</label>
                     <input
                         type="number"
-                        value={dados.valorHora}
+                        value={config.valorHora}
                         onChange={(e) =>
-                            setDados({
-                                ...dados,
+                            setConfig({
+                                ...config,
                                 valorHora: parseFloat(e.target.value),
                             })
                         }
@@ -30,10 +30,10 @@ export default function Config({ dados, setDados, secaoAtiva, setSecaoAtiva, mes
                     <label>Horas por dia:</label>
                     <input
                         type="number"
-                        value={dados.horasDia}
+                        value={config.horasDia}
                         onChange={(e) =>
-                            setDados({
-                                ...dados,
+                            setConfig({
+                                ...config,
                                 horasDia: parseFloat(e.target.value),
                             })
                         }
@@ -42,10 +42,10 @@ export default function Config({ dados, setDados, secaoAtiva, setSecaoAtiva, mes
                     <label>Minutos por dia:</label>
                     <input
                         type="number"
-                        value={dados.minutosDia}
+                        value={config.minutosDia}
                         onChange={(e) =>
-                            setDados({
-                                ...dados,
+                            setConfig({
+                                ...config,
                                 minutosDia: parseFloat(e.target.value),
                             })
                         }
@@ -59,18 +59,18 @@ export default function Config({ dados, setDados, secaoAtiva, setSecaoAtiva, mes
                                     <input
                                         type="checkbox"
                                         value={i}
-                                        checked={dados.diasTrabalhados.includes(i)}
+                                        checked={config.diasTrabalhados.includes(i)}
                                         onChange={(e) => {
                                             const dia = parseInt(e.target.value);
-                                            const dias = [...dados.diasTrabalhados];
+                                            const dias = [...config.diasTrabalhados];
                                             if (e.target.checked) {
                                                 if (!dias.includes(dia)) dias.push(dia);
                                             } else {
                                                 const idx = dias.indexOf(dia);
                                                 if (idx > -1) dias.splice(idx, 1);
                                             }
-                                            setDados({
-                                                ...dados,
+                                            setConfig({
+                                                ...config,
                                                 diasTrabalhados: dias,
                                             });
                                         }}
@@ -96,17 +96,17 @@ export default function Config({ dados, setDados, secaoAtiva, setSecaoAtiva, mes
 
                     <button
                         onClick={async () => {
-                            if (!dados.uid) return alert("Usuário não identificado!");
+                            if (!config.uid) return alert("Usuário não identificado!");
 
-                            const dadosAtualizados = { ...dados };
+                            await salvarConfig(config.uid, {
+                                tipo: config.tipo,
+                                horasDia: config.horasDia,
+                                minutosDia: config.minutosDia,
+                                valorHora: config.valorHora,
+                                diasTrabalhados: config.diasTrabalhados
+                            });
 
-                            await salvarWallet(
-                                dados.uid,
-                                dadosAtualizados,
-                                mesSelecionado,
-                                anoSelecionado
-                            );
-                            alert("💾 Configurações salvas com sucesso!");
+                            alert("💾 Configuração da conta atualizada!");
                         }}
                     >
                         Salvar
@@ -117,10 +117,10 @@ export default function Config({ dados, setDados, secaoAtiva, setSecaoAtiva, mes
                     <label>Salário mensal (R$):</label>
                     <input
                         type="number"
-                        value={dados.salarioMensal}
+                        value={config.salarioMensal}
                         onChange={(e) =>
-                            setDados({
-                                ...dados,
+                            setConfig({
+                                ...config,
                                 salarioMensal: parseFloat(e.target.value),
                             })
                         }
@@ -138,15 +138,16 @@ export default function Config({ dados, setDados, secaoAtiva, setSecaoAtiva, mes
                                     /> */}
                     <button
                         onClick={async () => {
-                            if (!dados.uid) return alert("Usuário não identificado!");
-                            const novosDados = { ...dados };
-                            await salvarWallet(
-                                dados.uid,
-                                novosDados,
-                                mesSelecionado,
-                                anoSelecionado
-                            );
-                            alert("💾 Configurações CLT salvas com sucesso!");
+                            if (!config.uid) return alert("Usuário não identificado!");
+                            await salvarConfig(config.uid, {
+                                tipo: config.tipo,
+                                horasDia: config.horasDia,
+                                minutosDia: config.minutosDia,
+                                valorHora: config.valorHora,
+                                diasTrabalhados: config.diasTrabalhados
+                            });
+
+                            alert("💾 Configuração da conta atualizada!");
                         }}
                     >
                         Salvar
