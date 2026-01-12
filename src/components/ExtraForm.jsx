@@ -28,6 +28,7 @@ export default function ExtraForm({ onAdd }) {
                 onChange={(e) => setValorHora(e.target.value)}
             />
             <button
+                className="btn btn-indigo"
                 onClick={() => {
                     if (!valorHora) return alert("Informe o valor da hora extra!");
                     onAdd({

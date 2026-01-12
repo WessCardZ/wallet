@@ -80,11 +80,8 @@ export default function Sidebar({
             </div>
 
             <div className="buttons">
-                <button onClick={() => setSecaoAtiva("")}>🏠 Voltar</button>
-                <button onClick={() => setSecaoAtiva("config")}>⚙️ Configurar</button>
-                <button onClick={() => setSecaoAtiva("gasto")}>➕ Adicionar Gasto</button>
-                <button onClick={() => setSecaoAtiva("extra")}>⏱️ Horas Extras</button>
-                <button onClick={() => setSecaoAtiva("banco")}>🏦 Bancos / Cartões</button>
+                <button className="btn btn-indigo" onClick={() => setSecaoAtiva("")}>🏠 Voltar</button>
+                <button className="btn btn-indigo" onClick={() => setSecaoAtiva("config")}>⚙️ Configurar</button>
             </div>
         </aside>
     );

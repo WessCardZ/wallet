@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./style.css";
+import "./configAccount.css"
 
 import { auth, salvarConfig, carregarConfig } from "../firebase";
 import { useNavigate } from "react-router-dom";

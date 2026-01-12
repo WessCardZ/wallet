@@ -8,6 +8,7 @@ import {
     onAuthStateChanged
 } from "../firebase";
 import "./style.css";
+import "./login.css"
 import { useNavigate } from "react-router-dom";
 import { carregarConfig } from "../firebase";
 

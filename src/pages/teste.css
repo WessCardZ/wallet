@@ -1,0 +1,820 @@
+/* ==================== Base ==================== */
+body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background-color: #0e1525;
+    color: #f0f4ff;
+    overflow-x: hidden;
+}
+
+.wallet-container {
+    display: flex;
+    height: 100vh;
+    transition: all 0.3s ease;
+}
+
+.headerContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ==================== Sidebar ==================== */
+.sidebar {
+    width: 280px;
+    background-color: #111a2e;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-shadow: 3px 0 10px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+}
+
+.sidebar h1 {
+    color: #fff;
+    font-size: 24px;
+    letter-spacing: 1px;
+    text-align: left;
+}
+
+/* ==================== Saldo / Resumo ==================== */
+.saldo {
+    background: linear-gradient(145deg, #1a2338, #121b2f);
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 10px;
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.05);
+}
+
+/* ==================== Botões (sidebar / geral) ==================== */
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.buttons button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 14px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 10px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+}
+
+.buttons button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.buttons button.salvar {
+    grid-column: span 2;
+    padding: 10px 20px;
+    font-weight: 600;
+    background-color: #27ae60;
+}
+
+.buttons button.salvar:hover {
+    background-color: #219150;
+}
+
+/* ==================== Conteúdo Principal ==================== */
+.content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.card {
+    background-color: #1a2338;
+    width: 90%;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 5px 18px rgba(0, 0, 0, 0.25);
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.01);
+}
+
+/* ==================== Inputs & Selects (globais) ==================== */
+input,
+select {
+    width: 100%;
+    margin-bottom: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    background-color: #23345a;
+    color: #fff;
+    transition: 0.2s;
+}
+
+input:focus,
+select:focus {
+    background-color: #2c4270;
+}
+
+/* ==================== Listas (globais) ==================== */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    background-color: #23345a;
+    margin: 6px 0;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+}
+
+/* ==================== Ações e botões de ação ==================== */
+.acoes-item {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 8px;
+}
+
+.btn-acao {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-acao svg {
+    width: 18px;
+    height: 18px;
+    stroke: #fff;
+}
+
+.btn-acao:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
+}
+
+/* cores específicas para btn-acao */
+.btn-acao.pago {
+    background-color: #3498db;
+}
+
+.btn-acao.pago:hover {
+    background-color: #5dade2;
+}
+
+.btn-acao.salvar {
+    background-color: #3498db;
+}
+
+.btn-acao.salvar:hover {
+    background-color: #5dade2;
+}
+
+.btn-acao.cancelar {
+    background-color: #7f8c8d;
+}
+
+.btn-acao.cancelar:hover {
+    background-color: #95a5a6;
+}
+
+.btn-acao.adicionar {
+    background-color: #27ae60;
+}
+
+.btn-acao.adicionar:hover {
+    background-color: #2ecc71;
+}
+
+.btn-acao.editar {
+    background-color: #f39c12;
+}
+
+.btn-acao.editar:hover {
+    background-color: #f1c40f;
+}
+
+.btn-acao.remover {
+    background-color: #e74c3c;
+}
+
+.btn-acao.remover:hover {
+    background-color: #ff6b5a;
+}
+
+/* ==================== Logout (header) ==================== */
+.btn-logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 60%;
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 10px 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(231, 76, 60, 0.3);
+}
+
+.btn-logout:hover {
+    background: linear-gradient(135deg, #ff6b6b, #e74c3c);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(231, 76, 60, 0.4);
+}
+
+.btn-logout:active {
+    transform: scale(0.97);
+}
+
+.icon-logout {
+    width: 20px;
+    height: 20px;
+}
+
+/* ==================== Editar / Remover (botões simples) ==================== */
+.editar,
+.remover,
+.adicionar,
+.pago {
+    background: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 16px;
+    transition: 0.2s;
+}
+
+.editar:hover {
+    color: #4cd964;
+}
+
+.remover:hover {
+    color: #ff3b30;
+}
+
+/* ==================== Loader ==================== */
+.loader {
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #3498db;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    animation: spin 0.8s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+/* ---------------------- NOVO ---------------------- */
+
+.containerConfig {
+    background: #1a2338;
+    padding: 32px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 900px;
+    display: flex;
+    gap: 24px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Cards PJ / CLT */
+.configCard {
+    flex: 1;
+    background: #0f172a;
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    color: #fff;
+}
+
+/* Card desativado */
+.configCard.disabled {
+    opacity: 0.6;
+    justify-content: center;
+    text-align: center;
+}
+
+/* Títulos */
+.configCard h2 {
+    margin-bottom: 8px;
+    font-size: 1.5rem;
+}
+
+/* Campo */
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 0.9rem;
+    color: #cbd5f5;
+}
+
+/* Inputs */
+.containerConfig input {
+    padding: 12px 14px;
+    border-radius: 10px;
+    width: 90%;
+    border: none;
+    background: #1e293b;
+    color: #fff;
+    outline: none;
+    font-size: 1rem;
+}
+
+.containerConfig input::placeholder {
+    color: #94a3b8;
+}
+
+.containerConfig input:focus {
+    box-shadow: 0 0 0 2px #6366f1;
+}
+
+/* Botão */
+.btnPrimary {
+    margin-top: 8px;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s;
+}
+
+.btnPrimary:hover {
+    transform: translateY(-2px);
+    opacity: 0.9;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .containerConfig {
+        flex-direction: column;
+    }
+}
+
+/* -------------------------------------------------- */
+
+/* ==================== Limita a altura das listas e adiciona scroll vertical ==================== */
+#gastosList ul,
+#bancosList ul {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 6px;
+    margin-top: 10px;
+}
+
+/* Aparência da barra de rolagem (thumbs) */
+#gastosList ul::-webkit-scrollbar-thumb,
+#bancosList ul::-webkit-scrollbar-thumb {
+    background-color: rgba(150, 150, 150, 0.5);
+    border-radius: 6px;
+}
+
+#gastosList ul::-webkit-scrollbar-thumb:hover,
+#bancosList ul::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(100, 100, 100, 0.7);
+}
+
+/* Ajustes para o layout específico das listas com IDs */
+#gastosList li,
+#bancosList li {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ==================== Formulários de adicionar itens (Gasto, Extra, Banco) - estilo dentro de .card ==================== */
+.card input,
+.card select {
+    width: 100%;
+    padding: 8px 10px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.card button {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.card button:hover {
+    background-color: #2980b9;
+}
+
+/* === Checkboxes bonitos e alinhados === */
+.dias-semana label,
+.dias-mes label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    color: #f0f4ff;
+    cursor: pointer;
+    margin: 6px 8px;
+    user-select: none;
+}
+
+.dias-semana input[type="checkbox"],
+.dias-mes input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #3498db;
+    cursor: pointer;
+    transform: translateY(1px);
+}
+
+.dias-semana input[type="checkbox"]:hover,
+.dias-mes input[type="checkbox"]:hover {
+    transform: scale(1.1);
+    transition: 0.15s ease;
+}
+
+.dias-semana,
+.dias-mes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-top: 8px;
+}
+
+/* ==================== Responsividade ==================== */
+
+/* Desktop -> Tablet */
+@media (max-width: 1024px) {
+    .wallet-container {
+        flex-direction: column;
+        height: auto;
+    }
+
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 15px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+        overflow-y: hidden;
+    }
+
+    .saldo {
+        margin-top: 0;
+        padding: 10px 15px;
+    }
+
+    .buttons {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+    }
+
+    .buttons button {
+        flex: 1 1 calc(33.33% - 10px);
+        min-width: 110px;
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+
+    .content {
+        padding: 25px;
+    }
+}
+
+/* Tablet -> Celular */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px;
+        overflow-x: hidden;
+    }
+
+    .wallet-container {
+        flex-direction: column;
+        height: auto;
+        padding: 0 10px;
+        box-sizing: border-box;
+    }
+
+    .headerContainer {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .btn-logout {
+        width: 30%;
+        padding: 8px 12px;
+        font-size: 14px;
+    }
+
+    .sidebar {
+        flex-direction: column;
+        align-items: center;
+        padding: 12px 15px;
+        width: 100%;
+        overflow-x: hidden;
+        box-sizing: border-box;
+    }
+
+    .sidebar h1 {
+        font-size: 20px;
+        margin-bottom: 10px;
+        text-align: center;
+        width: 100%;
+    }
+
+    select {
+        width: 100%;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+    }
+
+    .saldo {
+        width: 100%;
+        margin-top: 10px;
+        padding: 12px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+
+    .buttons {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+    }
+
+    .buttons button {
+        flex: 1 1 calc(45% - 8px);
+        font-size: 14px;
+        padding: 10px;
+        border-radius: 8px;
+        max-width: 200px;
+    }
+
+    .buttons button.salvar {
+        flex: 1 1 100%;
+        max-width: none;
+    }
+
+    .content {
+        padding: 15px;
+    }
+
+    .card {
+        width: 100%;
+        padding: 18px;
+        box-sizing: border-box;
+    }
+
+    input,
+    select,
+    button {
+        font-size: 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    ul li {
+        flex-direction: column;
+        align-items: flex-start;
+        font-size: 14px;
+    }
+
+    /* listas com scroll em mobile */
+    #gastosList ul,
+    #bancosList ul {
+        max-height: 210px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 6px;
+        margin-top: 10px;
+    }
+
+    #gastosList ul::-webkit-scrollbar,
+    #bancosList ul::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    #gastosList ul::-webkit-scrollbar-thumb,
+    #bancosList ul::-webkit-scrollbar-thumb {
+        background-color: rgba(150, 150, 150, 0.5);
+        border-radius: 6px;
+    }
+
+    #gastosList ul::-webkit-scrollbar-thumb:hover,
+    #bancosList ul::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(100, 100, 100, 0.7);
+    }
+
+    #gastosList li,
+    #bancosList li {
+        padding: 10px;
+        /* border-bottom: 1px solid #ddd; */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #gastosList ul,
+    #bancosList ul {
+        max-height: 180px;
+        padding-right: 4px;
+    }
+
+    #gastosList li,
+    #bancosList li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+        gap: 8px;
+    }
+
+    .card .extra-form {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .card .extra-form input {
+        flex: 1;
+    }
+
+    .card .extra-form button {
+        flex: 0 0 auto;
+    }
+
+    .card input,
+    .card select,
+    .card button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .card .extra-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .acoes-item {
+        gap: 4px;
+    }
+
+    .btn-acao {
+        padding: 4px;
+        border-radius: 6px;
+    }
+
+    .btn-acao svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .iconPay {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 14px;
+        height: 14px;
+    }
+
+    .editar,
+    .remover,
+    .adicionar,
+    .pago {
+        box-sizing: border-box;
+        margin-left: 4px;
+        font-size: 16px;
+    }
+}
+
+
+
+/* Celulares pequenos */
+@media (max-width: 420px) {
+    .sidebar h1 {
+        font-size: 18px;
+    }
+
+    .saldo {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .buttons button {
+        flex: 1 1 100%;
+        font-size: 13px;
+        padding: 8px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+}
+
+/* Login responsivo pequeno */
+@media (max-width: 600px) {
+    .login-container {
+        width: 70%;
+        padding: 25px;
+        border-radius: 12px;
+    }
+
+    .login-container h1 {
+        font-size: 20px;
+    }
+
+    .login-container input,
+    .login-container button,
+    .google-btn {
+        font-size: 14px;
+        padding: 12px;
+    }
+}
+
+.configCard.selectable {
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.configCard.selectable:hover {
+    transform: translateY(-2px);
+}
+
+.configCard.active {
+    border: 2px solid #6c63ff;
+    box-shadow: 0 0 12px rgba(108, 99, 255, 0.4);
+}

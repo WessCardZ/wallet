@@ -62,6 +62,7 @@ export default function DiasRemovidos({
             </div>
 
             <button
+                className="btn btn-indigo"
                 style={{ marginTop: 10 }}
                 onClick={() => setSecaoAtiva("config")}
             >

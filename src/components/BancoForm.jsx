@@ -79,8 +79,6 @@ export default function BancoForm({ onAdd }) {
                 />
             </div>
 
-
-
             {!ehMeu && (
                 <input
                     type="text"
@@ -90,7 +88,7 @@ export default function BancoForm({ onAdd }) {
                 />
             )}
 
-            <button onClick={adicionarBanco}>Adicionar</button>
+            <button className="btn btn-indigo" onClick={adicionarBanco}>Adicionar</button>
         </>
     );
 }
