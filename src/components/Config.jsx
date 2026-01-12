@@ -82,6 +82,7 @@ export default function Config({ config, setConfig, secaoAtiva, setSecaoAtiva, m
                     </div>
 
                     <button
+                        className="btn btn-indigo"
                         style={{ marginBottom: "8px" }}
                         onClick={() =>
                             setSecaoAtiva(
@@ -95,6 +96,7 @@ export default function Config({ config, setConfig, secaoAtiva, setSecaoAtiva, m
                     </button>
 
                     <button
+                        className="btn btn-indigo"
                         onClick={async () => {
                             if (!config.uid) return alert("Usuário não identificado!");
 
@@ -137,6 +139,7 @@ export default function Config({ config, setConfig, secaoAtiva, setSecaoAtiva, m
                                         }
                                     /> */}
                     <button
+                        className="btn btn-indigo"
                         onClick={async () => {
                             if (!config.uid) return alert("Usuário não identificado!");
                             await salvarConfig(config.uid, {

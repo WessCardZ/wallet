@@ -21,6 +21,7 @@ export default function GastoForm({ onAdd }) {
                 onChange={(e) => setValor(e.target.value)}
             />
             <button
+                className="btn btn-indigo"
                 onClick={() => {
                     if (!nome || !valor) return alert("Preencha os campos!");
                     onAdd({ nome, valor: parseValor(valor) });
