@@ -398,6 +398,18 @@ export default function Wallet() {
                                         </section>
                                     )}
 
+                                    {wallet.gastosFixos.length > 0 && (
+                                        <section className="card">
+                                            <h2>Gastos Fixos</h2>
+                                            <Lista
+                                                itens={wallet.gastosFixos}
+                                                tipo="gasto"
+                                                onRemover={removerGastoFixo}
+                                                onEditar={editarGastoFixo}
+                                            />
+                                        </section>
+                                    )}
+
                                     {wallet.bancos.length > 0 && (
                                         <section className="card" id="bancosList">
                                             <h2>Bancos / Cartões</h2>
@@ -411,18 +423,6 @@ export default function Wallet() {
                                                 onAddValor={(i, v) =>
                                                     addValor("bancos", i, v)
                                                 }
-                                            />
-                                        </section>
-                                    )}
-
-                                    {wallet.gastosFixos.length > 0 && (
-                                        <section className="card">
-                                            <h2>Gastos Fixos</h2>
-                                            <Lista
-                                                itens={wallet.gastosFixos}
-                                                tipo="gasto"
-                                                onRemover={removerGastoFixo}
-                                                onEditar={editarGastoFixo}
                                             />
                                         </section>
                                     )}
